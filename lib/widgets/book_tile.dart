@@ -5,6 +5,7 @@ import '../models/route_payloads.dart';
 
 /// 参数化复用组件：图书列表项。
 ///
+/// AI 辅助：组件签名与高借阅量徽标由 Trae 生成，本人按截图确认样式。
 /// 变化点全部走构造入参：
 /// - 数据变 → [book]、[borrowCount]（借阅次数可能被详情页更新）
 /// - 行为变 → [onTap]、[onLongPress] 回调

@@ -8,6 +8,7 @@ import '../widgets/book_tile.dart';
 
 /// 图书列表页。
 ///
+/// AI 辅助：分页与回传骨架由 Trae 生成，本人按测试结果修正。
 /// 数据由 [BookListArgs] 指定的分类过滤；条数不确定，统一走 ListView.builder 懒构建。
 /// 长按任意条目弹出筛选层，选择结果通过 pop 回传给首页（回程带货）。
 class BookListPage extends StatefulWidget {

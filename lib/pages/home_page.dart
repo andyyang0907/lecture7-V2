@@ -8,6 +8,7 @@ import '../widgets/category_card.dart';
 
 /// 步骤三：网格首页。
 ///
+/// AI 辅助：GridView 与副标题回传展示由 Trae 生成，本人验证后调整卡片比例。
 /// 分类入口用 GridView.builder 铺成宫格墙；点击分类时把 [BookListArgs]
 /// 作为命名路由参数带去列表页，返回时接住 [BookListResult] 显示在副标题上。
 class HomePage extends StatefulWidget {
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisCount: 2,
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
-              childAspectRatio: 1.55,
+              childAspectRatio: 1.35,
             ),
             itemCount: categories.length + 1,
             itemBuilder: (context, index) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// 参数化复用组件：分类宫格卡片。
 ///
+/// AI 辅助：生成初版布局，本人调整图标容器与文字层级。
 /// 首页的分类入口和"全部藏书"入口共用它，只有数据、图标和点击行为不同。
 class CategoryCard extends StatelessWidget {
   const CategoryCard({

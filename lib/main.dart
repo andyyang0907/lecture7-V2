@@ -10,7 +10,7 @@ void main() {
   runApp(const AppSkeletonApp());
 }
 
-/// 应用入口：所有页面统一走命名路由，跳转代码里不再出现 MaterialPageRoute。
+/// AI 辅助：路由表写法由 Trae 生成初稿，本人核对后经 flutter test 验证。
 class AppSkeletonApp extends StatelessWidget {
   const AppSkeletonApp({super.key});
 
