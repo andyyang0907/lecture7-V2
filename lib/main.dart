@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'pages/book_detail_page.dart';
 import 'pages/book_list_page.dart';
+import 'pages/home_page.dart';
 import 'routes/app_routes.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class AppSkeletonApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        AppRoutes.home: (_) => const BookListPage(),
+        AppRoutes.home: (_) => const HomePage(),
         AppRoutes.list: (_) => const BookListPage(),
         AppRoutes.detail: (_) => const BookDetailPage(),
       },
