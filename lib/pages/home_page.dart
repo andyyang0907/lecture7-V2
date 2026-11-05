@@ -4,6 +4,7 @@ import '../data/book_repository.dart';
 import '../models/book.dart';
 import '../models/route_payloads.dart';
 import '../routes/app_routes.dart';
+import '../widgets/category_card.dart';
 
 /// 步骤三：网格首页。
 ///
@@ -52,6 +53,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 76,
+        actions: [
+          IconButton(
+            tooltip: '关于本应用',
+            icon: const Icon(Icons.info_outline),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.about),
+          ),
+        ],
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -97,11 +105,19 @@ class _HomePageState extends State<HomePage> {
               crossAxisSpacing: 12,
               childAspectRatio: 1.55,
             ),
-            itemCount: categories.length,
+            itemCount: categories.length + 1,
             itemBuilder: (context, index) {
-              final category = categories[index];
+              if (index == 0) {
+                return CategoryCard(
+                  title: '全部藏书',
+                  icon: Icons.library_books,
+                  subtitle: '共 ${books.length} 本',
+                  onTap: () => _openList(null),
+                );
+              }
+              final category = categories[index - 1];
               final count = books.where((b) => b.category == category).length;
-              return _CategoryCard(
+              return CategoryCard(
                 title: category,
                 icon: _icons[category] ?? Icons.book,
                 subtitle: '共 $count 本',
@@ -110,51 +126,6 @@ class _HomePageState extends State<HomePage> {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-/// 首页分类卡片（后续步骤会抽取到 lib/widgets/ 复用）。
-class _CategoryCard extends StatelessWidget {
-  const _CategoryCard({
-    required this.title,
-    required this.icon,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  final String title;
-  final IconData icon;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, size: 32, color: scheme.primary),
-              const Spacer(),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(subtitle, style: TextStyle(color: scheme.onSurfaceVariant)),
-            ],
-          ),
-        ),
       ),
     );
   }

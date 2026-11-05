@@ -3,4 +3,5 @@ abstract final class AppRoutes {
   static const String home = '/';
   static const String list = '/list';
   static const String detail = '/detail';
+  static const String about = '/about';
 }

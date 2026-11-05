@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/book.dart';
+import '../models/route_payloads.dart';
 
 /// 步骤二：图书详情页。
 ///
@@ -31,9 +32,22 @@ class BookDetailPage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(book.summary, style: const TextStyle(height: 1.6)),
           const SizedBox(height: 32),
-          FilledButton.tonal(
+          FilledButton.icon(
+            onPressed: () => Navigator.pop(
+              context,
+              BorrowResult(
+                bookId: book.id,
+                title: book.title,
+                borrowCount: book.borrowCount + 1,
+              ),
+            ),
+            icon: const Icon(Icons.bookmark_add),
+            label: const Text('借阅这本书'),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('返回'),
+            child: const Text('返回（不带值）'),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'pages/about_page.dart';
 import 'pages/book_detail_page.dart';
 import 'pages/book_list_page.dart';
 import 'pages/home_page.dart';
@@ -26,6 +27,7 @@ class AppSkeletonApp extends StatelessWidget {
         AppRoutes.home: (_) => const HomePage(),
         AppRoutes.list: (_) => const BookListPage(),
         AppRoutes.detail: (_) => const BookDetailPage(),
+        AppRoutes.about: (_) => const AboutPage(),
       },
       initialRoute: AppRoutes.home,
     );

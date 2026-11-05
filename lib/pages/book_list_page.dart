@@ -4,6 +4,7 @@ import '../data/book_repository.dart';
 import '../models/book.dart';
 import '../models/route_payloads.dart';
 import '../routes/app_routes.dart';
+import '../widgets/book_tile.dart';
 
 /// 图书列表页。
 ///
@@ -21,6 +22,31 @@ class _BookListPageState extends State<BookListPage> {
       .loadAll();
 
   BookListArgs _args = const BookListArgs();
+
+  /// 分页模拟：每次只渲染 [pageSize] 条，点"加载更多"再追加一页。
+  static const int pageSize = 20;
+  int _visibleCount = pageSize;
+
+  /// 详情页回传的借阅次数覆盖值（bookId → 最新借阅次数）。
+  final Map<int, int> _borrowOverrides = {};
+
+  /// 最近一次回传的一句话，返回首页时再带回去。
+  String? _lastAction;
+
+  Future<void> _openDetail(Book book) async {
+    final result = await Navigator.pushNamed(
+      context,
+      AppRoutes.detail,
+      arguments: book,
+    );
+    if (!mounted || result is! BorrowResult) return;
+    setState(() {
+      _borrowOverrides[result.bookId] = result.borrowCount;
+      _lastAction = '已借阅《${result.title}》，当前借阅 ${result.borrowCount} 次';
+    });
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(_lastAction!)));
+  }
 
   @override
   void didChangeDependencies() {
@@ -69,6 +95,12 @@ class _BookListPageState extends State<BookListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => Navigator.pop(
+            context,
+            BookListResult(summary: _lastAction ?? '已查看「${_args.title}」列表'),
+          ),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -100,20 +132,32 @@ class _BookListPageState extends State<BookListPage> {
           if (books.isEmpty) {
             return const Center(child: Text('该分类下暂无藏书'));
           }
+          final visible = books.take(_visibleCount).toList(growable: false);
+          final hasMore = visible.length < books.length;
           return ListView.builder(
-            itemCount: books.length,
+            // 末尾多出的一项就是"加载更多"页脚。
+            itemCount: visible.length + 1,
             itemBuilder: (context, index) {
-              final book = books[index];
-              return ListTile(
-                leading: const Icon(Icons.menu_book),
-                title: Text(book.title),
-                subtitle: Text('${book.category} · ${book.author}'),
-                trailing: Text('${book.borrowCount} 次'),
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  AppRoutes.detail,
-                  arguments: book,
-                ),
+              if (index == visible.length) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                  child: hasMore
+                      ? FilledButton.tonal(
+                          onPressed: () =>
+                              setState(() => _visibleCount += pageSize),
+                          child: Text(
+                            '加载更多（已显示 ${visible.length}/${books.length} 条）',
+                          ),
+                        )
+                      : Center(child: Text('已经到底了，共 ${books.length} 条')),
+                );
+              }
+              final book = visible[index];
+              final borrowCount = _borrowOverrides[book.id] ?? book.borrowCount;
+              return BookTile(
+                book: book,
+                borrowCount: borrowCount,
+                onTap: () => _openDetail(book),
                 onLongPress: _showFilterSheet,
               );
             },
