@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/book_repository.dart';
 import '../models/book.dart';
+import '../routes/app_routes.dart';
 
 /// 步骤一：图书列表页。
 ///
@@ -15,14 +16,13 @@ class BookListPage extends StatefulWidget {
 }
 
 class _BookListPageState extends State<BookListPage> {
-  late final Future<List<Book>> _booksFuture = BookRepository.instance.loadAll();
+  late final Future<List<Book>> _booksFuture = BookRepository.instance
+      .loadAll();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('图书馆藏书'),
-      ),
+      appBar: AppBar(title: const Text('图书馆藏书')),
       body: FutureBuilder<List<Book>>(
         future: _booksFuture,
         builder: (context, snapshot) {
@@ -42,6 +42,12 @@ class _BookListPageState extends State<BookListPage> {
                 title: Text(book.title),
                 subtitle: Text('${book.category} · ${book.author}'),
                 trailing: Text('${book.borrowCount} 次'),
+                // 去程带货：把强类型 Book 实例跟着路由对象一起传过去。
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  AppRoutes.detail,
+                  arguments: book,
+                ),
               );
             },
           );

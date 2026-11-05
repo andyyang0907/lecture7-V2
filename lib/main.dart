@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'pages/book_detail_page.dart';
 import 'pages/book_list_page.dart';
+import 'routes/app_routes.dart';
 
 void main() {
   runApp(const AppSkeletonApp());
 }
 
-/// 应用入口：本步骤只有列表页，下一步再把路由表接上。
+/// 应用入口：所有页面统一走命名路由，跳转代码里不再出现 MaterialPageRoute。
 class AppSkeletonApp extends StatelessWidget {
   const AppSkeletonApp({super.key});
 
@@ -19,7 +21,12 @@ class AppSkeletonApp extends StatelessWidget {
         colorSchemeSeed: const Color(0xFF3B5BDB),
         useMaterial3: true,
       ),
-      home: const BookListPage(),
+      routes: {
+        AppRoutes.home: (_) => const BookListPage(),
+        AppRoutes.list: (_) => const BookListPage(),
+        AppRoutes.detail: (_) => const BookDetailPage(),
+      },
+      initialRoute: AppRoutes.home,
     );
   }
 }
